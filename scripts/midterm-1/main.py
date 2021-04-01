@@ -8,12 +8,12 @@ from matplotlib.ticker import (MultipleLocator, AutoMinorLocator)
 import matplotlib.colors as mplcolors
 import math
 from functions import *
+import os
 
 # Protein ID and data folder in which save data
-pdb_id = '5lxe'
-# pdb_id = '3lye'
-data_folder = '../../data/midterm-1'
-output_folder = '../../output/midterm-1'
+pdb_id = '3lye'
+data_folder = 'data/midterm-1'
+output_folder = 'output/midterm-1'
 
 # Retrieve the protein from PDB
 pdbl = PDBList()
