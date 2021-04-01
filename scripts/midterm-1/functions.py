@@ -44,14 +44,14 @@ def get_distance_matrix(residues, seq_sep):
     return np.array(distances, dtype=float)
 
 
-def plot_heatmap(dist_matrix, pdb_id, data_folder):
+def plot_heatmap(dist_matrix, pdb_id, output_folder):
     current_cmap = copy.copy(matplotlib.cm.get_cmap())
     current_cmap.set_bad(color='white')
 
     fig, ax = plt.subplots(figsize=(12, 12))
     im = ax.imshow(dist_matrix)
     fig.colorbar(im, fraction=0.03, pad=0.05)
-    plt.savefig('{}/ca_distances_{}.png'.format(data_folder, pdb_id), bbox_inches='tight')
+    plt.savefig('{}/ca_distances_{}.png'.format(output_folder, pdb_id), bbox_inches='tight')
 
     # Plot contact map
     contact_map = (dist_matrix[:] < 5).astype(
@@ -65,4 +65,4 @@ def plot_heatmap(dist_matrix, pdb_id, data_folder):
     ax.yaxis.set_major_locator(MultipleLocator(10))
     ax.yaxis.set_minor_locator(AutoMinorLocator(10))
 
-    plt.savefig('{}/ca_contacts_{}.png'.format(data_folder, pdb_id), bbox_inches='tight')
+    plt.savefig('{}/ca_contacts_{}.png'.format(output_folder, pdb_id), bbox_inches='tight')

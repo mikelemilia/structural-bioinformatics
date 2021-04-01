@@ -13,6 +13,7 @@ from functions import *
 pdb_id = '5lxe'
 # pdb_id = '3lye'
 data_folder = '../../data/midterm-1'
+output_folder = '../../output/midterm-1'
 
 # Retrieve the protein from PDB
 pdbl = PDBList()
@@ -31,7 +32,7 @@ structure = PDBParser(QUIET=True).get_structure(pdb_id, '{}/pdb{}.ent'.format(da
 sequence_separation = [0, np.inf]
 dist_matrix = get_distance_matrix(structure[0]['A'], sequence_separation)
 
-plot_heatmap(dist_matrix, pdb_id, data_folder)
+plot_heatmap(dist_matrix, pdb_id, output_folder)
 
 # Count the number of residues for different sequence separation ranges
 sequence_separation = [0, 6]
@@ -77,7 +78,7 @@ with open("{}/ramachandran.dat".format(data_folder)) as f:
             regions_matrix.append([int(ele) for ele in line.strip().split()])
 
 # Plot Ramachandran regions
-# fig, ax = plt.subplots(figsize=(12, 12))
+fig, ax = plt.subplots(figsize=(12, 12))
 cmap = mplcolors.ListedColormap(['#FFFFFF', '#B3E8FF', '#7FD9FF'])
 
 f, axes = plt.subplots(1, len(rama))
@@ -103,4 +104,4 @@ for ax, chain_id in zip(axes, rama):
             print(residue, phi, psi, phi_col, psi_row, regions_matrix[psi_row][phi_col])
 
 plt.tight_layout()  # Remove figure padding
-plt.savefig('data/ramachandran_regions.png', bbox_inches='tight')
+plt.savefig('{}/ramachandran_regions_{}.png'.format(output_folder, pdb_id), bbox_inches='tight')
