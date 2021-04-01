@@ -1,1 +1,1 @@
-# template-python-project
+# Structural Bioinformatics
