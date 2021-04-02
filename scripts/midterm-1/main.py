@@ -11,7 +11,8 @@ from functions import *
 import os
 
 # Protein ID and data folder in which save data
-pdb_id = '3lye'
+# pdb_id = '3lye'
+pdb_id = '5lxe'
 data_folder = 'data/midterm-1'
 output_folder = 'output/midterm-1'
 
@@ -38,23 +39,23 @@ plot_heatmap(dist_matrix, pdb_id, output_folder)
 sequence_separation = [0, 6]
 dist_matrix = get_distance_matrix(structure[0]['A'], sequence_separation)
 contact_map = (dist_matrix[:] < 5).astype(float)
-print("Number of residues for range [0, 6]: ", int(np.sum(contact_map[:]) / 2))
+print("Number of residues for range [0, 6]: ", int(np.sum(np.triu(contact_map[:]))))
+print("of them, {} are on the diagonal".format(contact_map.shape[0]))
 
 sequence_separation = [7, 12]
 dist_matrix = get_distance_matrix(structure[0]['A'], sequence_separation)
 contact_map = (dist_matrix[:] < 5).astype(float)
-count = np.sum(contact_map[:]) / 2
-print("Number of residues for range [7, 12]: ", int(np.sum(contact_map[:]) / 2))
+print("Number of residues for range [7, 12]: ", int(np.sum(np.triu(contact_map[:]))))
 
 sequence_separation = [13, 24]
 dist_matrix = get_distance_matrix(structure[0]['A'], sequence_separation)
 contact_map = (dist_matrix[:] < 5).astype(float)
-print("Number of residues for range [13, 24]: ", int(np.sum(contact_map[:]) / 2))
+print("Number of residues for range [13, 24]: ", int(np.sum(np.triu(contact_map[:]))))
 
 sequence_separation = [25, np.inf]
 dist_matrix = get_distance_matrix(structure[0]['A'], sequence_separation)
 contact_map = (dist_matrix[:] < 5).astype(float)
-print("Number of residues for range [25, inf]: ", int(np.sum(contact_map[:]) / 2))
+print("Number of residues for range [25, inf]: ", int(np.sum(np.triu(contact_map[:]))))
 
 # Build the peptides (reveal structure holes) and Calculate PSI and PHI
 ppb = PPBuilder()
