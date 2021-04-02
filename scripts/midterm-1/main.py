@@ -1,14 +1,6 @@
-import copy
-from Bio.PDB import *
-from Bio.PDB.PDBParser import PDBParser
-import numpy as np
-import matplotlib
-import matplotlib.pyplot as plt
-from matplotlib.ticker import (MultipleLocator, AutoMinorLocator)
 import matplotlib.colors as mplcolors
 import math
 from functions import *
-import os
 
 # Protein ID and data folder in which save data
 pdb_id = '3lye'
