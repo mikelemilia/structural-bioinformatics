@@ -11,8 +11,8 @@ from functions import *
 import os
 
 # Protein ID and data folder in which save data
-# pdb_id = '3lye'
-pdb_id = '5lxe'
+pdb_id = '3lye'
+# pdb_id = '5lxe'
 data_folder = 'data/midterm-1'
 output_folder = 'output/midterm-1'
 
@@ -27,7 +27,7 @@ io.set_structure(structure[0])
 io.save("{}/pdb{}_cut.ent".format(data_folder, pdb_id), select=Select())
 
 pdb_id = '{}_cut'.format(pdb_id)
-structure = PDBParser(QUIET=True).get_structure(pdb_id, '{}/pdb{}.ent'.format(data_folder,pdb_id))
+structure = PDBParser(QUIET=True).get_structure(pdb_id, '{}/pdb{}.ent'.format(data_folder, pdb_id))
 
 # Generation of distance matrix and plot of heatmap
 sequence_separation = [0, np.inf]
@@ -36,26 +36,14 @@ dist_matrix = get_distance_matrix(structure[0]['A'], sequence_separation)
 plot_heatmap(dist_matrix, pdb_id, output_folder)
 
 # Count the number of residues for different sequence separation ranges
-sequence_separation = [0, 6]
-dist_matrix = get_distance_matrix(structure[0]['A'], sequence_separation)
-contact_map = (dist_matrix[:] < 5).astype(float)
-print("Number of residues for range [0, 6]: ", int(np.sum(np.triu(contact_map[:]))))
-print("of them, {} are on the diagonal".format(contact_map.shape[0]))
+sequence_separations = [[0, 6], [7, 12], [13, 24], [25, np.inf]]
 
-sequence_separation = [7, 12]
-dist_matrix = get_distance_matrix(structure[0]['A'], sequence_separation)
-contact_map = (dist_matrix[:] < 5).astype(float)
-print("Number of residues for range [7, 12]: ", int(np.sum(np.triu(contact_map[:]))))
-
-sequence_separation = [13, 24]
-dist_matrix = get_distance_matrix(structure[0]['A'], sequence_separation)
-contact_map = (dist_matrix[:] < 5).astype(float)
-print("Number of residues for range [13, 24]: ", int(np.sum(np.triu(contact_map[:]))))
-
-sequence_separation = [25, np.inf]
-dist_matrix = get_distance_matrix(structure[0]['A'], sequence_separation)
-contact_map = (dist_matrix[:] < 5).astype(float)
-print("Number of residues for range [25, inf]: ", int(np.sum(np.triu(contact_map[:]))))
+for sequence_separation in sequence_separations:
+    dist_matrix = get_distance_matrix(structure[0]['A'], sequence_separation)
+    contact_map = (dist_matrix[:] < 5).astype(float)
+    print("Number of residues for range {}: {}".format(sequence_separation, int(np.sum(np.triu(contact_map[:])))))
+    if sequence_separation[0] == 0:
+        print("of them, {} are on the diagonal".format(contact_map.shape[0]))
 
 # Build the peptides (reveal structure holes) and Calculate PSI and PHI
 ppb = PPBuilder()
