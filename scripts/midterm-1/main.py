@@ -1,5 +1,8 @@
 import matplotlib.colors as mplcolors
 import math
+
+import numpy as np
+
 from functions import *
 
 # Protein ID and data folder in which save data
@@ -27,6 +30,41 @@ dist_matrix = get_distance_matrix(structure[0]['A'], sequence_separation)
 
 plot_heatmap(dist_matrix, pdb_id, output_folder)
 
+
+
+# DISTANCE MATRIX COMPARISON
+
+dist_matrix_prof = get_distance_prof(structure[0]['A'])
+
+dist_matrix_prof = np.asmatrix(dist_matrix_prof)
+dist_matrix = np.asmatrix(dist_matrix)
+
+# with open('distance_outfile.txt', 'wb') as f:
+#     for i in range(dist_matrix.shape[0]):
+#         np.savetxt(f, dist_matrix_prof[i, :] - dist_matrix[i, :], fmt='%.2f')
+
+# CONTACT MAP COMPARISON
+
+contact_map_prof = np.asmatrix((dist_matrix_prof[:] < 5).astype(float))
+contact_map = np.asmatrix((dist_matrix[:] < 5).astype(float))
+
+# with open('contact_outfile.txt', 'wb') as f:
+#     for i in range(contact_map.shape[0]):
+#         np.savetxt(f, contact_map_prof[i, :] - contact_map[i, :], fmt='%.2f')
+
+# CONTACT MAP [7, 12] COMPARISON
+
+dist_matrix_7 = get_distance_matrix(structure[0]['A'], [7, 12])
+contact_map_7 = np.asmatrix((dist_matrix_7[:] < 5).astype(float))
+contact_map_prof_7 = np.asmatrix((np.triu(contact_map_prof, 7) - np.triu(contact_map_prof, 13)))
+
+# with open('contact_7_outfile.txt', 'wb') as f:
+#     for i in range(contact_map_7.shape[0]):
+#         np.savetxt(f, contact_map_prof_7[i, :] - contact_map_7[i, :], fmt='%.2f')
+
+
+
+
 # Count the number of residues for different sequence separation ranges
 sequence_separations = [[0, 6], [7, 12], [13, 24], [25, np.inf]]
 
@@ -35,6 +73,7 @@ for sequence_separation in sequence_separations:
     contact_map = (dist_matrix[:] < 5).astype(float)
     print("Number of residues for range {}: {}".format(sequence_separation, int(np.sum(np.triu(contact_map[:])))))
     if sequence_separation[0] == 0:
+        print(dist_matrix)
         print("of them, {} are on the diagonal".format(contact_map.shape[0]))
 
 # Build the peptides (reveal structure holes) and Calculate PSI and PHI

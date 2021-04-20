@@ -15,6 +15,21 @@ class Select(Select):
         return not atom.is_disordered() or atom.get_altloc() == "A"
 
 
+def get_distance_prof(residues):
+    # Calculate the distance matrix
+    distances = []
+    for residue1 in residues:
+        if residue1.id[0] == " " and residue1.has_id("CA"):  # Exclude hetero/water residues
+            row = []
+            for residue2 in residues:
+                if residue2.id[0] == " " and residue2.has_id("CA"):  # Exclude hetero/water residues
+                    atom1 = residue1["CB"] if residue1.has_id('CB') else residue1["CA"]
+                    atom2 = residue2["CB"] if residue2.has_id('CB') else residue2["CA"]
+                    row.append(atom1 - atom2)
+            distances.append(row)
+    return np.array(distances, dtype=float)
+
+
 def get_distance_matrix(residues, seq_sep):
     distances = []
     atoms = []
@@ -26,20 +41,19 @@ def get_distance_matrix(residues, seq_sep):
                 found = True
                 atoms.append(atom)
                 break
-        if found == False: atoms.append(residue["CA"])
+        if found is False:
+            atoms.append(residue["CA"])
 
-    i = 0
-    for residue1 in residues:
+    for i in range(len(list(residues))):
         row = []
-        j = 0
-        for residue2 in residues:
-            if seq_sep[0] <= abs(residue1.id[1] - residue2.id[1]) <= seq_sep[1]:
+        for j in range(len(list(residues))):
+            if seq_sep[0] <= abs(list(residues)[i].id[1] - list(residues)[j].id[1]) <= seq_sep[1]:
                 row.append(atoms[i] - atoms[j])
+                if seq_sep[0] == 7:
+                    print(abs(list(residues)[i].id[1] - list(residues)[j].id[1]))
             else:
                 row.append(None)
-            j += 1
         distances.append(row)
-        i += 1
 
     return np.array(distances, dtype=float)
 
