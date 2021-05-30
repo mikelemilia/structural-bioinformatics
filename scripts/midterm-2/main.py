@@ -27,19 +27,26 @@ if __name__ == "__main__":
         exact_energy = []
         exact_energy_smooth = []
         m_mat = np.matrix(m_matrix)
+
         for i in range(len(seq)):
 
+            # Index of the residue in position i
+            k = aa_list.index(seq[i])
             energy_temp = 0
 
+            # List of the contacts of i
             contact = contact_map[i, :]
-            idx = (np.array(contact) == 1)
+            # DA DECOMMENTARE PER FAR VENIRE IL RISULTATO DEL PROF
+            # for j in range(i):
+            #     contact[j] = 0
 
+            idx = np.array(contact) == 1
             interaction_i = [seq[j] for j in range(len(idx)) if idx[j] == True]
 
-            k = aa_list.index(seq[i])
             for elem in interaction_i:
+                # Index of the resiude in contact
                 h = aa_list.index(elem)
-
+                # Add the current contribution
                 energy_temp += m_mat[k, h]
 
             exact_energy.append(energy_temp)
@@ -85,4 +92,3 @@ if __name__ == "__main__":
         # print(pred_smooth)
 
         print("\n")
-
